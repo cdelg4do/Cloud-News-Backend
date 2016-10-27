@@ -5,7 +5,8 @@
 var api = {
 
     // Método GET de la api:
-    // buscar todos los registros publicados de la tabla News
+    // buscar todos los registros publicados de la tabla News,
+    // ordenados por fecha de modificación (primero los más recientes)
 
     get: function(req, res, next) {
 
@@ -21,7 +22,7 @@ var api = {
         var database = context.data;
 
         // Query de SQL
-        var query = {   sql: "SELECT * FROM News WHERE (status = 'published')"    };
+        var query = {   sql: "SELECT id, title, writer, image, updatedAt FROM News WHERE (status = 'published') ORDER BY updatedAt DESC"    };
 
         // Ejecutar la query y devolver los resultados en un json
         database.execute(query).then( function(result) {
