@@ -11,6 +11,7 @@ var table = azureMobileApps.table();
 // Esquema de la tabla
 // (tipos permitidos: string, number, date, boolean)
 table.columns = {
+    "status": "string",
     "title": "string",
     "text": "string",
     "image": "string",
