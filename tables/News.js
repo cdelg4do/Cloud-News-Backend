@@ -11,14 +11,15 @@ var table = azureMobileApps.table();
 // Esquema de la tabla
 // (tipos permitidos: string, number, date, boolean)
 table.columns = {
-    "status": "string",
     "title": "string",
     "text": "string",
     "image": "string",
     "writer": "string",
     "latitude": "number",
     "longitude": "number",
-    "visits": "number"
+    "visits": "number",
+    "status": "string",
+    "publishedAt": "date"
 };
 
 // El esquema será estático
