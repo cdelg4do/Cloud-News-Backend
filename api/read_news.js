@@ -28,13 +28,13 @@ var api = {
             var database = context.data;
 
             // Query de búsqueda
-            var query = {   sql: "SELECT title, writer, publishedAt, visits, image, latitude, longitude, text FROM News WHERE (id =" + newsId + " AND status = 'published')"    };
+            var query1 = {   sql: "SELECT title, writer, publishedAt, visits, image, latitude, longitude, text FROM News WHERE (id =" + newsId + " AND status = 'published')"    };
 
             // Ejecutar la query, actualizar el núm de visitas y devolver los resultados en un json
-            database.execute(query).then( function(result) {
+            database.execute(query1).then( function(result) {
 
                 // Si la consulta devolvió resultados (uno como máximo), actualizamos el contador de visitas
-                if (result.totalCount > 0) {
+                if (result.length > 0) {
 
                     var query2 = {   sql: "UPDATE News SET visits = visits + 1 WHERE (id = " + newsId + ")"    };
                     database.execute(query2);
@@ -43,8 +43,6 @@ var api = {
                 res.status(200).type("application/json").send(result);
             });
         }
-
-
     }
 
 };
