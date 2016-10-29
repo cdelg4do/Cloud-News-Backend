@@ -8,14 +8,9 @@ var api = {
     // buscar todos los registros publicados de la tabla News,
     // ordenados por fecha de modificación (primero los más recientes)
 
-    get: function(req, res, next) {
+    get: function(req, res) {
 
-        // Comprobar si la petición trae parámetros
-        if (typeof req.params.length < 0) {
-            return next();
-        }
-
-        // Obtención del contexto (el objeto que encapsula el servicio de Azure Mobile)
+        // Obtención del contexto de Azure Mobile
         var context = req.azureMobile;
 
         // Conexión a la BBDD del servicio
