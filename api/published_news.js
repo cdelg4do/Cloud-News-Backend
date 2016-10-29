@@ -17,7 +17,7 @@ var api = {
         var database = context.data;
 
         // Query de SQL
-        var query = {   sql: "SELECT id, title, writer, image, updatedAt FROM News WHERE (status = 'published') ORDER BY updatedAt DESC"    };
+        var query = {   sql: "SELECT id, title, writer, image, publishedAt FROM News WHERE (status = 'published') ORDER BY publishedAt DESC"    };
 
         // Ejecutar la query y devolver los resultados en un json
         database.execute(query).then( function(result) {
