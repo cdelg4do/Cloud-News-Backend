@@ -27,11 +27,18 @@ var api = {
             // Conexión a la BBDD del servicio
             var database = context.data;
 
-            // Query de SQL
+            // Query de búsqueda
             var query = {   sql: "SELECT title, writer, publishedAt, visits, image, latitude, longitude, text FROM News WHERE (id =" + newsId + " AND status = 'published')"    };
 
-            // Ejecutar la query y devolver los resultados en un json
+            // Ejecutar la query, actualizar el núm de visitas y devolver los resultados en un json
             database.execute(query).then( function(result) {
+
+                // Si la consulta devolvió resultados (uno como máximo), actualizamos el contador de visitas
+                if (result.totalCount > 0) {
+
+                    var query2 = {   sql: "UPDATE News SET visits = visits + 1 WHERE (id = " + newsId + ")"    };
+                    database.execute(query2);
+                }
 
                 res.status(200).type("application/json").send(result);
             });

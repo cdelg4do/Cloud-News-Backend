@@ -16,12 +16,13 @@ var api = {
         // Conexión a la BBDD del servicio
         var database = context.data;
 
-        // Query de SQL
+        // Query SQL de búsqueda
         var query = {   sql: "SELECT id, title, writer, image, publishedAt FROM News WHERE (status = 'published') ORDER BY publishedAt DESC"    };
 
         // Ejecutar la query y devolver los resultados en un json
         database.execute(query).then( function(result) {
-            res.json(result);
+            
+            res.status(200).type("application/json").send(result);
         });
     }
 
