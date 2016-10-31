@@ -21,17 +21,15 @@ var api = {
 
         // Ejecutar la query y devolver los resultados en un json
         database.execute(query).then( function(result) {
-            
+
             res.status(200).type("application/json").send(result);
         });
     }
 
 };
 
-
 // Niveles de autenticación requeridos por esta api
 api.get.access = 'anonymous';
-
 
 // Exportar la api
 module.exports = api;

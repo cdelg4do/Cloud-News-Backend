@@ -2,6 +2,8 @@
  * Created by carlos on 28/10/16.
  */
 
+var request = require("request");
+
 var api = {
 
     // Método GET de la api:
@@ -18,30 +20,70 @@ var api = {
             res.status(400).type("application/json").send( {status:400, message: 'missing newsId'} );
         }
 
-        // Si los parámetros son correctos, se realiza la búsqueda
+        // Si los parámetros son correctos
         else {
 
-            // Obtención del contexto de Azure Mobile
-            var context = req.azureMobile;
+            // Obtención del token para acceso a la API graph
+            var fbAppId = "297565897303694";
+            var fbAppKey = "04b8dbc978f93a47b0200eacb87bed0e";
 
-            // Conexión a la BBDD del servicio
-            var database = context.data;
+            // Url para la obtención del token de acceso a la API Graph de Facebook
+            // (devuelve una respuesta en texto plano tal que: 'access_token=...' )
+            var apiGraphTokenUrl = "https://graph.facebook.com/oauth/access_token?grant_type=client_credentials&client_id=" + fbAppId + "&client_secret=" + fbAppKey;
 
-            // Query de búsqueda
-            var query1 = {   sql: "SELECT title, writer, publishedAt, visits, image, latitude, longitude, text FROM News WHERE (id =" + newsId + " AND status = 'published')"    };
+            // Consulta
+            var tokenString = "";
 
-            // Ejecutar la query, actualizar el núm de visitas y devolver los resultados en un json
-            database.execute(query1).then( function(result) {
+            request(apiGraphTokenUrl, function (error, response, body) {
 
-                // Si la consulta devolvió resultados (uno como máximo), actualizamos el contador de visitas
-                if (result.length > 0) {
-
-                    var query2 = {   sql: "UPDATE News SET visits = visits + 1 WHERE (id = " + newsId + ")"    };
-                    database.execute(query2);
+                if (!error && response.statusCode == 200) {
+                    tokenString = body.toString();
                 }
 
-                res.status(200).type("application/json").send(result);
+                // Obtención del contexto de Azure Mobile y de la conexión a la BBDD
+                var context = req.azureMobile;
+                var database = context.data;
+
+                // Query de búsqueda
+                var query1 = {   sql: "SELECT title, writer, publishedAt as date, visits, image, latitude, longitude, text FROM News WHERE (id =" + newsId + " AND status = 'published')"    };
+                database.execute(query1).then( function(result) {
+
+                    if (result.length > 0) {
+
+                        // Si la consulta devolvió resultados (uno como máximo), actualizamos el contador de visitas
+                        var query2 = {   sql: "UPDATE News SET visits = visits + 1 WHERE (id = " + newsId + ")"    };
+                        database.execute(query2);
+
+                        // Si obtuvimos un token de la API Graph de Facebook, consultamos el nombre del autor de la noticia
+                        if (tokenString != "") {
+
+                            // Id del autor y Url de consulta a la API Graph
+                            var facebookUserId = result[0].writer;
+                            var apiGraphQueryUrl = "https://graph.facebook.com/v2.8/" + facebookUserId + "?" + tokenString;
+
+                            request(apiGraphQueryUrl, function (error, response, body) {
+
+                                if (!error && response.statusCode == 200) {
+
+                                    var facebookUserName = JSON.parse(body).name;
+                                    var editedResult = result;
+                                    editedResult[0].writer = facebookUserName;
+
+                                    res.status(200).type("application/json").send(editedResult);
+                                }
+                                else {
+                                    res.status(200).type("application/json").send(result);
+                                }
+                            });
+                        }
+                    }
+                    else {
+                        res.status(200).type("application/json").send(result);
+                    }
+                });
+
             });
+
         }
     }
 
@@ -50,7 +92,6 @@ var api = {
 
 // Niveles de autenticación requeridos por esta api
 api.get.access = 'anonymous';
-
 
 // Exportar la api
 module.exports = api;
