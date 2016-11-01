@@ -31,13 +31,13 @@ var api = {
 
                     // La query varía en función del tipo de artículo (published/submitted/draft)
                     if (status == 'published') {
-                        query = {   sql: "SELECT id, title, image, visits, publishedAt as date FROM News WHERE (status = 'published' AND writer = '"+ userId +"') ORDER BY Date DESC"    };
+                        query = {   sql: "SELECT id, title, hasImage, imageName, visits, publishedAt as date FROM News WHERE (status = 'published' AND writer = '"+ userId +"') ORDER BY date DESC"    };
                     }
                     else if (status == 'submitted') {
-                        query = {   sql: "SELECT id, title, image, visits = 0, updatedAt as date FROM News WHERE (status = 'submitted' AND writer = '"+ userId +"') ORDER BY Date DESC"    };
+                        query = {   sql: "SELECT id, title, hasImage, imageName, visits = 0, updatedAt as date FROM News WHERE (status = 'submitted' AND writer = '"+ userId +"') ORDER BY date DESC"    };
                     }
                     else if (status == 'draft') {
-                        query = {   sql: "SELECT id, title, image, visits = 0, updatedAt as date FROM News WHERE (status = 'draft' AND writer = '"+ userId +"') ORDER BY Date DESC"    };
+                        query = {   sql: "SELECT id, title, hasImage, imageName, visits = 0, updatedAt as date FROM News WHERE (status = 'draft' AND writer = '"+ userId +"') ORDER BY date DESC"    };
                     }
 
                     console.log("Query FINAL artículos '" + status +"' del usuario " + userId + " --> " + JSON.stringify(query));
