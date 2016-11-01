@@ -10,10 +10,10 @@ var api = {
     "post": function (req, res) {
 
         // Obtención del id del artículo
-        var articleId = req.query.id;
+        var articleId = req.body.id;
 
         // Comprobar que la petición incluye el parámetro status y que sea correcto
-        if(typeof id == 'undefined') {
+        if(typeof articleId == 'undefined') {
 
             res.status(400).type("application/json").send( {status:400, message: 'missing or incorrect id'} );
         }
@@ -33,12 +33,9 @@ var api = {
                     // (solo tendrá efecto si el usuario es el autor del artículo, y si este está en estado borrador)
                     var query = { sql: "UPDATE News SET status = 'submitted' WHERE (id = '" + articleId + "' AND status = 'draft' AND writer = '" + userId + "')" };
 
-                    console.log("Query de envío de borrador --> " + JSON.stringify(query));
-
                     // Ejecutar la query y devolver el id del registro actualizado
-                    database.execute(query).then( function(result) {
+                    database.execute(query).then( function(results) {
 
-                        console.log("Resultado de la query de envío --> " + JSON.stringify(result));
                         res.status(200).type("application/json").send( { id: articleId} );
                     });
 
@@ -53,7 +50,7 @@ var api = {
 };
 
 // Niveles de autenticación requeridos por esta api
-api.get.access = 'authenticated';
+api.post.access = 'authenticated';
 
 // Exportar la api
 module.exports = api;
