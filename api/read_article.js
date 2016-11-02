@@ -35,7 +35,7 @@ var api = {
                     var database = context.data;
 
                     // Query de búsqueda en la BBDD
-                    var query = {   sql: "SELECT title, writer, COALESCE(NULLIF(publishedAt,''), updatedAt) as date, visits, hasImage, imageName, latitude, longitude, text FROM News WHERE (id =" + newsId + " AND writer = '" + userId + "')"    };
+                    var query = {   sql: "SELECT title, writer, COALESCE(NULLIF(publishedAt,''), updatedAt) as date, visits, hasImage, imageName, latitude, longitude, text FROM News WHERE (id ='" + newsId + "' AND writer = '" + userId + "')"    };
                     database.execute(query).then( function(result) {
 
                         if (result.length > 0) {

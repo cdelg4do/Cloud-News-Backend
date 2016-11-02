@@ -45,7 +45,7 @@ var api = {
                 var database = context.data;
 
                 // Query de búsqueda
-                var query1 = {   sql: "SELECT title, writer, publishedAt as date, visits, hasImage, imageName, latitude, longitude, text FROM News WHERE (id =" + newsId + " AND status = 'published')"    };
+                var query1 = {   sql: "SELECT title, writer, publishedAt as date, visits, hasImage, imageName, latitude, longitude, text FROM News WHERE (id ='" + newsId + "' AND status = 'published')"    };
                 database.execute(query1).then( function(result) {
 
                     if (result.length > 0) {
