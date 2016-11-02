@@ -26,9 +26,27 @@ table.columns = {
 // El esquema será estático
 table.dynamicSchema = false;
 
+// Triggers para inserciones:
+table.insert( function(context) {
+
+/*
+     context.user.getIdentity("facebook").then( function(data) {
+        
+        context.item.writer = data.facebook.claims.nameidentifier;
+        return context.execute();
+     })
+     .catch( function(error) {
+
+        return(error);
+     });
+*/
+
+    return context.execute();
+});
+
 // Permisos de acceso a la tabla
 // (a escoger entre anonymous, authenticated y disabled)
-table.read.access = 'anonymous';
+table.read.access = 'authenticated';
 table.update.access = 'authenticated';
 table.delete.access = 'authenticated';
 table.insert.access = 'authenticated';
