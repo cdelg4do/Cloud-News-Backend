@@ -29,17 +29,17 @@ table.dynamicSchema = false;
 // Triggers para inserciones:
 table.insert( function(context) {
 
-/*
+    /*
      context.user.getIdentity("facebook").then( function(data) {
-        
-        context.item.writer = data.facebook.claims.nameidentifier;
-        return context.execute();
+
+     context.item.writer = data.facebook.claims.nameidentifier;
+     return context.execute();
      })
      .catch( function(error) {
 
-        return(error);
+     return(error);
      });
-*/
+     */
 
     return context.execute();
 });

@@ -51,7 +51,7 @@ var api = {
                     if (result.length > 0) {
 
                         // Si la consulta devolvió resultados (uno como máximo), actualizamos el contador de visitas
-                        var query2 = {   sql: "UPDATE News SET visits = visits + 1 WHERE (id = " + newsId + ")"    };
+                        var query2 = {   sql: "UPDATE News SET visits = visits + 1 WHERE (id = '" + newsId + "')"    };
                         database.execute(query2);
 
                         // Si obtuvimos un token de la API Graph de Facebook, consultamos el nombre del autor de la noticia
