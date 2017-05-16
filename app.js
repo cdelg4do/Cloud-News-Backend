@@ -2,7 +2,7 @@
  * Created by carlos on 27/10/16.
  */
 
-// Dependencias
+// Dependences
 var express = require("express");
 var azuremobileapps = require("azure-mobile-apps");
 
@@ -10,17 +10,16 @@ var azuremobileapps = require("azure-mobile-apps");
 var app = express();
 var mobile = azuremobileapps();
 
-// Configuración de Azure Mobile Apps: path de las tablas y de la api
+// Settings for Azure Mobile Apps: path to the tables and to the api
 mobile.api.import("./api");
 mobile.tables.import("./tables");
 
-// Inicializar la base de datos antes de escuchar peticiones
-// (se inicializa de forma asíncrona, y después se ejecuta la clausura siguiente)
+// Initialize the database (asynchronously) and then start listening
 mobile.tables.initialize().then(function () {
 
-    // Registrar el middleware Azure Mobile Apps
-    app.use(mobile);
+    // Register the Azure Mobile Apps middleware
+	app.use(mobile);
 
-    // Escuchar peticiones
+    // Listen for requests
     app.listen(process.env.PORT || 3000);
 });

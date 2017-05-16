@@ -1,25 +1,20 @@
 /**
  * Created by carlos on 27/10/16.
+ * 
+ * This api allows anonymous users to get the news list (articles already published)
  */
 
 var api = {
 
-    // Método GET de la api:
-    // buscar todos los registros publicados de la tabla News,
-    // ordenados por fecha de modificación (primero los más recientes)
-
     get: function(req, res) {
 
-        // Obtención del contexto de Azure Mobile
+        // Get the Azure Mobile context and connect to the service database
         var context = req.azureMobile;
-
-        // Conexión a la BBDD del servicio
         var database = context.data;
 
-        // Query SQL de búsqueda
+        // Execute the search query and send the results back as a json response
+        // (results are sorted by publication date, the latest first)
         var query = {   sql: "SELECT id, title, writer, hasImage, imageName, publishedAt FROM News WHERE (status = 'published') ORDER BY publishedAt DESC"    };
-
-        // Ejecutar la query y devolver los resultados en un json
         database.execute(query).then( function(result) {
 
             res.status(200).type("application/json").send(result);
@@ -28,8 +23,8 @@ var api = {
 
 };
 
-// Niveles de autenticación requeridos por esta api
+// Authentication level required by this api
 api.get.access = 'anonymous';
 
-// Exportar la api
+// Export the api
 module.exports = api;

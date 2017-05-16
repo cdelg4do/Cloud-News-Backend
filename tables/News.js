@@ -1,15 +1,17 @@
 /**
  * Created by carlos on 27/10/16.
+ * 
+ * This file describes the scheme, triggers and access permissions
+ * for the database table that stores the articles.
  */
 
-// Dependencias
+// Dependencies
 var azureMobileApps = require("azure-mobile-apps");
 
-// Crear la tabla
+// Table creation
 var table = azureMobileApps.table();
 
-// Esquema de la tabla
-// (tipos permitidos: string, number, date, boolean)
+// Table scheme (allowed field types: string, number, date, boolean)
 table.columns = {
     "title": "string",
     "status": "string",
@@ -23,34 +25,33 @@ table.columns = {
     "imageName": "string"
 };
 
-// El esquema será estático
+// This table will use a static scheme
 table.dynamicSchema = false;
 
-// Triggers para inserciones:
+// Triggers for insertions
 table.insert( function(context) {
 
     /*
-     context.user.getIdentity("facebook").then( function(data) {
+    context.user.getIdentity("facebook").then( function(data) {
 
-     context.item.writer = data.facebook.claims.nameidentifier;
-     return context.execute();
-     })
-     .catch( function(error) {
+        context.item.writer = data.facebook.claims.nameidentifier;
+        return context.execute();
+    })
+    .catch( function(error) {
 
-     return(error);
+        return(error);
      });
-     */
+    */
 
     return context.execute();
 });
 
-// Permisos de acceso a la tabla
-// (a escoger entre anonymous, authenticated y disabled)
+// Access permissions for this table (anonymous, authenticated or disabled)
 table.read.access = 'authenticated';
 table.update.access = 'authenticated';
 table.delete.access = 'authenticated';
 table.insert.access = 'authenticated';
 
 
-// Exportar la tabla
+// Export the table
 module.exports = table;

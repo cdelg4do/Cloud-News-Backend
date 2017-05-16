@@ -1,16 +1,14 @@
 /**
  * Created by carlos on 28/10/16.
+ * 
+ * This api allows authenticated users to get info about their current Facebook session.
  */
 
 var api = {
 
-    // Método GET de la api:
-    // Proporciona información sobre la sesión actual del usuario
-    // (solo pueden invocarla usuarios autenticados)
-
     "get": function (req, res) {
 
-        // Identificación del usuario
+        // Get the user data fetched from Facebook and send the results as a json response
         req.azureMobile.user.getIdentity("facebook").then( function(data) {
 
                 console.log("** ID **: "  + data.facebook.claims.nameidentifier);
@@ -37,8 +35,8 @@ var api = {
 
 };
 
-// Niveles de autenticación requeridos por esta api
+// Authentication level required by this api
 api.get.access = 'authenticated';
 
-// Exportar la api
+// Export the api
 module.exports = api;

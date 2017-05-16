@@ -1,35 +1,34 @@
 /**
  * Created by carlos on 29/10/16.
+ * 
+ * This api allows authenticated users to get all articles of a given type.
  */
 
 var api = {
 
     "get": function (req, res) {
 
-        // Obtención del tipo de artículos a buscar
+        // Get the article type to search for
         var status = req.query.status;
 
-        // Comprobar que la petición incluye el parámetro status y que sea correcto
         if( typeof status == 'undefined' || (status != 'draft' && status != 'submitted' && status != 'published') ) {
 
             res.status(400).type("application/json").send( {status:400, message: 'missing or incorrect status'} );
         }
 
-        // Si los parámetros son correctos
         else {
 
-            // Obtención del id de usuario
+            // Get the user Id
             req.azureMobile.user.getIdentity("facebook").then( function(data) {
 
                     var userId = data.facebook.claims.nameidentifier;
 
-                    // Conexión a la BBDD del servicio
+                    // Connection to the service database
                     var database = req.azureMobile.data;
 
-                    // Query SQL de búsqueda
+                    // Search query (different depending on the article type we are looking for)
                     var query = {};
-
-                    // La query varía en función del tipo de artículo (published/submitted/draft)
+                    
                     if (status == 'published') {
                         query = {   sql: "SELECT id, title, hasImage, imageName, visits, publishedAt as date FROM News WHERE (status = 'published' AND writer = '"+ userId +"') ORDER BY date DESC"    };
                     }
@@ -40,9 +39,9 @@ var api = {
                         query = {   sql: "SELECT id, title, hasImage, imageName, visits = 0, updatedAt as date FROM News WHERE (status = 'draft' AND writer = '"+ userId +"') ORDER BY date DESC"    };
                     }
 
-                    console.log("Query FINAL artículos '" + status +"' del usuario " + userId + " --> " + JSON.stringify(query));
+                    console.log("FINAL query for '" + status +"' articles from user " + userId + " --> " + JSON.stringify(query));
 
-                    // Ejecutar la query y devolver los resultados en un json
+                    // Execute the query and send the results back in a json response
                     database.execute(query).then( function(result) {
 
                         res.status(200).type("application/json").send(result);
@@ -58,8 +57,8 @@ var api = {
 
 };
 
-// Niveles de autenticación requeridos por esta api
+// Authentication level required by this api
 api.get.access = 'authenticated';
 
-// Exportar la api
+// Export the api
 module.exports = api;
