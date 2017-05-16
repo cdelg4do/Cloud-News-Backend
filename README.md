@@ -1,5 +1,7 @@
-# Cloud News Backend
+# Cloud News (Backend)
 
-Backend en *Node.js* y *Express* del cliente de **Cloud News**, para desplegar en la plataforma de servicios de Microsoft Azure.
+This is a *Node.js* / *Express* backend for **Cloud News**, a simple news aggregator for iOS.
 
-Código del cliente iOS disponible en el repositorio *Cloud News Client* (https://github.com/cdelg4do/Cloud-News-Client).
+This backend is intended to be deployed on the Microsoft Azure service platform.
+
+Source code for the iOS client is available <a href="https://github.com/cdelg4do/Cloud-News-Client">here</a>.
