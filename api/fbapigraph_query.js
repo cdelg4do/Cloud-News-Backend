@@ -25,7 +25,7 @@ var api = {
             var fbAppKey = "04b8dbc978f93a47b0200eacb87bed0e";
 
             // Url to request the access token
-            // (returns a plain text response like 'access_token=...')
+            // (returns a JSON object like '{"access_token": "...", "token_type": "bearer"}')
             var apiGraphTokenUrl = "https://graph.facebook.com/oauth/access_token?grant_type=client_credentials&client_id=" + fbAppId + "&client_secret=" + fbAppKey;
 
             // Launch the request and wait for results
@@ -37,9 +37,10 @@ var api = {
                 
                 // In case of success, use the received token to compose a new request to get the user data
                 else {
-                    var tokenString = body.toString();
-                    var apiGraphQueryUrl = "https://graph.facebook.com/v2.8/" + facebookUserId + "?fields=id,name,email,link&" + tokenString;
-
+                    let json = JSON.parse(body);
+                    let tokenString = json.access_token;
+                    var apiGraphQueryUrl = "https://graph.facebook.com/v2.8/" + facebookUserId + "?fields=id,name,email,link&access_token=" + tokenString;
+                    
                     request(apiGraphQueryUrl, function (error, response, body) {
 
                         if (error || response.statusCode != 200) {
